@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UK Furniture House | Luxury Home Collections</title>
+    <style>
+        /* CSS Settings */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #ffffff; color: #1a1a1a; line-height: 1.4; }
+        
+        /* Header */
+        .header { background: #fff; padding: 15px; text-align: center; border-bottom: 2px solid #f8f8f8; position: sticky; top: 0; z-index: 100; }
+        .logo { font-size: 24px; font-weight: 900; letter-spacing: 1px; color: #b08d57; text-transform: uppercase; font-family: 'Georgia', serif; }
+        .tagline { font-size: 10px; color: #666; letter-spacing: 2px; text-transform: uppercase; margin-top: 5px; }
+
+        /* Navigation & Filters */
+        .nav-scroll { background: #fff; border-bottom: 1px solid #eee; overflow-x: auto; white-space: nowrap; padding: 12px 10px; position: sticky; top: 65px; z-index: 90; }
+        .cat-btn { display: inline-block; padding: 8px 18px; margin-right: 8px; background: #f4f4f4; border: none; border-radius: 20px; font-size: 11px; font-weight: bold; cursor: pointer; text-transform: uppercase; transition: 0.3s; }
+        .cat-btn.active { background: #b08d57; color: #fff; }
+
+        .sub-nav { display: none; padding: 10px; background: #fdfdfd; overflow-x: auto; white-space: nowrap; border-bottom: 1px solid #eee; }
+        .sub-btn { display: inline-block; padding: 6px 14px; margin-right: 6px; background: #fff; border: 1px solid #ddd; border-radius: 5px; font-size: 10px; font-weight: 600; cursor: pointer; }
+        .sub-btn.active { background: #000; color: #fff; border-color: #000; }
+
+        /* Grid - 2 items per row on mobile */
+        .main-container { padding: 10px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+        .product-card { background: #fff; border: 1px solid #f0f0f0; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; transition: 0.3s; }
+        .product-card:hover { box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .product-card img { width: 100%; height: 160px; object-fit: cover; background: #f9f9f9; }
+        
+        .product-info { padding: 10px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
+        .p-title { font-size: 12px; font-weight: 800; text-transform: uppercase; margin-bottom: 4px; color: #000; height: 32px; overflow: hidden; }
+        .p-desc { font-size: 10px; color: #777; margin-bottom: 8px; line-height: 1.2; height: 24px; overflow: hidden; }
+        .p-price { font-size: 16px; font-weight: 800; color: #b08d57; margin-bottom: 10px; }
+        .add-btn { background: #000; color: #fff; border: none; padding: 10px; font-size: 10px; font-weight: bold; border-radius: 4px; cursor: pointer; text-transform: uppercase; width: 100%; }
+
+        /* Basket & Sidebar */
+        .basket-trigger { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 400px; background: #b08d57; color: #fff; border: none; padding: 15px; border-radius: 50px; font-weight: bold; font-size: 14px; z-index: 100; box-shadow: 0 10px 20px rgba(0,0,0,0.2); cursor: pointer; }
+        #sidebar { position: fixed; right: -100%; top: 0; width: 100%; height: 100%; background: #fff; z-index: 200; transition: 0.4s; padding: 30px; overflow-y: auto; }
+        #sidebar.active { right: 0; }
+        .close-btn { font-size: 35px; float: right; cursor: pointer; margin-top: -10px; }
+
+        /* Form */
+        .form-group { margin-bottom: 15px; }
+        label { display: block; font-size: 11px; font-weight: bold; margin-bottom: 5px; text-transform: uppercase; color: #888; }
+        input, textarea { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 15px; background: #fafafa; }
+        
+        .platform-choice { display: flex; gap: 10px; margin: 15px 0; }
+        .choice-card { flex: 1; border: 2px solid #eee; padding: 12px; border-radius: 8px; text-align: center; cursor: pointer; }
+        .choice-card.selected { border-color: #b08d57; background: #fffaf0; }
+
+        .submit-btn { width: 100%; padding: 18px; border: none; border-radius: 6px; font-weight: bold; font-size: 16px; cursor: pointer; color: white; background: #222; }
+
+        @media (min-width: 768px) {
+            .main-container { grid-template-columns: repeat(4, 1fr); max-width: 1200px; margin: 20px auto; }
+            .product-card img { height: 220px; }
+            #sidebar { width: 400px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div class="logo">UK Furniture House</div>
+        <div class="tagline">Quality Furniture For Your Dream Home</div>
+    </div>
+
+    <!-- Categories -->
+    <div class="nav-scroll">
+        <button class="cat-btn active" onclick="setCategory('All', this)">All Items</button>
+        <button class="cat-btn" onclick="setCategory('Wardrobe', this)">Wardrobes</button>
+   	<button class="cat-btn" onclick="setCategory('Chest of Drawers', this)">Chest of Drawers</button>
+        <button class="cat-btn" onclick="setCategory('Sofa', this)">Sofa Sets</button>
+        <button class="cat-btn" onclick="setCategory('Bed', this)">Beds</button>
+        <button class="cat-btn" onclick="setCategory('Dining', this)">Dining</button>
+    </div>
+
+    <!-- Wardrobe Sub-Filters -->
+    <div class="sub-nav" id="wardrobe-sub">
+        <button class="sub-btn active" onclick="setSub('All', this)">All Doors</button>
+	<button class="sub-btn" onclick="setSub('1 Door', this)">1 Door</button>
+        <button class="sub-btn" onclick="setSub('2 Door', this)">2 Door</button>
+        <button class="sub-btn" onclick="setSub('3 Door', this)">3 Door</button>
+        <button class="sub-btn" onclick="setSub('4 Door', this)">4 Door</button>
+        <button class="sub-btn" onclick="setSub('5 Door', this)">5 Door</button>
+        <button class="sub-btn" onclick="setSub('6 Door', this)">6 Door</button>
+        <button class="sub-btn" onclick="setSub('8 Door', this)">8 Door</button>
+    </div>
+
+    <div class="main-container" id="product-grid"></div>
+
+    <button class="basket-trigger" onclick="toggleSidebar()">🛒 VIEW BASKET (<span id="count">0</span>)</button>
+
+    <!-- Sidebar -->
+    <div id="sidebar">
+        <span class="close-btn" onclick="toggleSidebar()">&times;</span>
+        <h2 style="margin: 30px 0 20px 0; font-family: serif;">Checkout</h2>
+        <div id="basket-items" style="margin-bottom: 20px;"></div>
+        <div style="font-size: 18px; font-weight: 800; border-top: 2px solid #eee; padding-top: 15px; margin-bottom: 20px;">Total: £<span id="total-price">0</span></div>
+
+        <form id="checkout-form">
+            <div class="form-group">
+                <label>Delivery Name</label>
+                <input type="text" id="cust-name" placeholder="Full Name" required>
+            </div>
+            <div class="form-group">
+                <label>UK Address & Postcode</label>
+                <textarea id="cust-addr" rows="3" placeholder="Full Delivery Address" required></textarea>
+            </div>
+
+            <label>Order Via:</label>
+            <div class="platform-choice">
+                <div class="choice-card selected" onclick="selectPlatform('whatsapp', this)">
+                    <p style="font-size: 12px; font-weight: bold;">WhatsApp</p>
+                </div>
+                <div class="choice-card" onclick="selectPlatform('facebook', this)">
+                    <p style="font-size: 12px; font-weight: bold;">Facebook</p>
+                </div>
+            </div>
+
+            <button type="submit" class="submit-btn" id="confirm-btn">PLACE ORDER NOW</button>
+        </form>
+    </div>
+
+    <script>
+        // Data - Aap yahan naye products add kar sakte hain
+        const products = [
+            { title: "3 Door Luxury Wardrobe", desc: "Mirror finish with drawers", price: 260, cat: "Wardrobe", sub: "3 Door", img: "https://i.postimg.cc/mPnWMK96/image.jpg" },
+            { title: "Premium Alpha Bedroom Set", desc: "3-piece matching set", price: 360, cat: "Wardrobe", sub: "3 Door", img: "https://i.postimg.cc/SnPb8H91/image.jpg" },
+            { title: "Modern High Gloss Wardrobe", desc: "Spacious storage units", price: 360, cat: "Wardrobe", sub: "3 Door", img: "https://i.postimg.cc/QFzZ5v7S/image.jpg" },
+            { title: "Bespoke Royal Set", desc: "Wardrobe, chest and bedside", price: 360, cat: "Wardrobe", sub: "3 Door", img: "https://i.postimg.cc/tscGP86k/image.jpg" },
+            { title: "Velvet Corner Sofa", desc: "Luxury seating for living room", price: 550, cat: "Sofa", sub: "All", img: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=500" }
+        ];
+
+        const config = {
+            whatsapp: "447473019909", // 
+            facebook: "https://www.facebook.com/profile.php?id=61562163172208"
+        };
+
+        let basket = [];
+        let filter = { cat: 'All', sub: 'All' };
+        let selectedPlatform = 'whatsapp';
+
+        function renderProducts() {
+            const grid = document.getElementById('product-grid');
+            const data = products.filter(p => (filter.cat === 'All' || p.cat === filter.cat) && (filter.sub === 'All' || p.sub === filter.sub));
+            
+            grid.innerHTML = data.map((p, i) => `
+                <div class="product-card">
+                    <img src="${p.img}" alt="furniture">
+                    <div class="product-info">
+                        <div>
+                            <div class="p-title">${p.title}</div>
+                            <div class="p-desc">${p.desc}</div>
+                        </div>
+                        <div>
+                            <div class="p-price">£${p.price}</div>
+                            <button class="add-btn" onclick="addToBasket('${p.title}', ${p.price})">Add to Basket</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function setCategory(cat, btn) {
+            filter.cat = cat; filter.sub = 'All';
+            document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            document.getElementById('wardrobe-sub').style.display = (cat === 'Wardrobe') ? 'block' : 'none';
+            renderProducts();
+        }
+
+        function setSub(sub, btn) {
+            filter.sub = sub;
+            document.querySelectorAll('.sub-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            renderProducts();
+        }
+
+        function addToBasket(name, price) {
+            basket.push({name, price});
+            updateBasketUI();
+            alert(name + " added to basket!");
+        }
+
+        function updateBasketUI() {
+            const list = document.getElementById('basket-items');
+            let total = 0;
+            list.innerHTML = basket.map((item, i) => {
+                total += item.price;
+                return `<div style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid #eee; font-size:13px;">
+                    <span>${item.name}</span>
+                    <span>£${item.price} <button onclick="remove(${i})" style="color:red; border:none; background:none; cursor:pointer; font-weight:bold;">✕</button></span>
+                </div>`;
+            }).join('');
+            document.getElementById('count').innerText = basket.length;
+            document.getElementById('total-price').innerText = total;
+        }
+
+        function remove(i) { basket.splice(i, 1); updateBasketUI(); }
+        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('active'); }
+
+        function selectPlatform(plt, el) {
+            selectedPlatform = plt;
+            document.querySelectorAll('.choice-card').forEach(c => c.classList.remove('selected'));
+            el.classList.add('selected');
+        }
+
+        document.getElementById('checkout-form').onsubmit = function(e) {
+            e.preventDefault();
+            if(basket.length === 0) return alert("Basket is empty!");
+
+            const name = document.getElementById('cust-name').value;
+            const addr = document.getElementById('cust-addr').value;
+            const total = document.getElementById('total-price').innerText;
+            const items = basket.map(i => `- ${i.name} (£${i.price})`).join('%0A');
+
+            if(selectedPlatform === 'whatsapp') {
+                const msg = `*UK FURNITURE HOUSE - NEW ORDER*%0A%0A*Customer:* ${name}%0A*Address:* ${addr}%0A%0A*Items Ordered:*%0A${items}%0A%0A*Total Amount:* £${total}`;
+                window.open(`https://wa.me/${config.whatsapp}?text=${msg}`, '_blank');
+            } else {
+                window.open(config.facebook, '_blank');
+            }
+        };
+
+        renderProducts();
+    </script>
+</body>
+</html>
