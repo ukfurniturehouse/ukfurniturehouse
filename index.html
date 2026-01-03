@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UK Furniture House | Luxury Home Collections</title>
-    <style>
+
+ <style>
         /* Modern CSS Variables */
         :root {
             --primary-gold: #b08d57;
@@ -13,9 +14,58 @@
             --text-color: #333;
         }
 
+        /* --- Floating Contact Buttons Design (NEW) --- */
+        .floating-contact-wrap {
+            position: fixed;
+            bottom: 110px; /* Basket button se upar rakhne ke liye */
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            z-index: 9999;
+        }
+
+        .floating-contact-wrap a {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .floating-contact-wrap img {
+            width: 28px;
+            height: 28px;
+        }
+
+        /* Buttons ke Colors */
+        .btn-facebook { background-color: #1877F2; }
+        .btn-messenger { background-color: #ffffff; border: 1px solid #eee; }
+        .btn-whatsapp { background-color: #25d366; }
+
+        .floating-contact-wrap a:hover {
+            transform: scale(1.15) rotate(5deg);
+        }
+
+        /* Mobile Phone ke liye setting */
+        @media (max-width: 768px) {
+            .floating-contact-wrap {
+                right: 15px;
+                bottom: 120px;
+            }
+            .floating-contact-wrap a {
+                width: 45px;
+                height: 45px;
+            }
+        }
+        /* --- Floating Design End --- */
+
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background: #f8f9fa; color: var(--text-color); line-height: 1.6; }
-        
+
         /* Header & Logo */
         .header { background: #fff; padding: 20px; text-align: center; border-bottom: 3px solid var(--primary-gold); position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
         .logo { font-size: 28px; font-weight: 900; letter-spacing: 2px; color: var(--primary-gold); text-transform: uppercase; font-family: 'serif'; }
@@ -70,6 +120,33 @@
 	.modal { display: none; position: fixed; z-index: 3000; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); justify-content: center; align-items: center; }
 	.modal img { max-width: 90%; max-height: 85%; border: 3px solid #fff; border-radius: 8px; }
 	.modal-close { position: absolute; top: 20px; right: 30px; color: #fff; font-size: 40px; cursor: pointer; font-weight: bold; }
+/* Sale Tag aur Purani Price ka design (Naya Code) */
+        .sale-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: #ff3b30;
+            color: white;
+            padding: 5px 12px;
+            font-size: 11px;
+            font-weight: bold;
+            border-radius: 5px;
+            text-transform: uppercase;
+            z-index: 10;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        .product-card {
+            position: relative; /* Ye line Sale Tag ko sahi jagah rakhne ke liye zaroori hai */
+        }
+
+        .old-price {
+            text-decoration: line-through;
+            color: #999;
+            font-size: 14px;
+            margin-right: 8px;
+            font-weight: normal;
+        }
     </style>
 </head>
 <body>
@@ -80,6 +157,11 @@
     </div>
 
     <!-- Main Categories -->
+<!-- Right Side Search Bar -->
+<div style="padding: 10px 20px; background: #fff; display: flex; justify-content: flex-end; border-bottom: 1px solid #eee;">
+    <input type="text" id="searchInput" onkeyup="searchProducts()" placeholder="🔍 Search furniture..." 
+    style="width: 250px; padding: 10px 15px; border-radius: 30px; border: 1px solid #ddd; outline: none; font-size: 14px; box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);">
+</div>
     <div class="nav-scroll">
         <button class="cat-btn active" onclick="setCategory('All', this)">All Collections</button>
         <button class="cat-btn" onclick="setCategory('Wardrobe', this)">Wardrobes</button>
@@ -138,53 +220,73 @@
         <div class="contact-links">
             <a href="https://wa.me/447473019909" class="contact-item"><span>🟢 WhatsApp:</span> +44 7473 019909</a>
             <a href="https://www.facebook.com/profile.php?id=61562163172208" class="contact-item"><span>🔵 Facebook:</span> UK Furniture House</a>
-            <a href="mailto:info@ukfurniturehouse.com" class="contact-item"><span>📧 Email:</span> ukfurniturehouse8202@gmail.com</a>
+            <a href="mailto:ukfurniturehouse8202@gmail.com" class="contact-item"><span>📧 Email:</span> ukfurniturehouse8202@gmail.com</a>
         </div>
         <p style="margin-top: 30px; font-size: 10px; color: #aaa;">© 2024 UK Furniture House. All Rights Reserved.</p>
     </div>
 	<div id="imageModal" class="modal">
-      		<span class="modal-close" onclick="closeImage()">&times;</span>
-       		<img id="fullImage" src="">
+        <div class="modal-content" style="background: white; max-width: 800px; width: 95%; border-radius: 15px; overflow: hidden; display: flex; flex-wrap: wrap; position: relative; margin: auto;">
+            <span class="modal-close" onclick="closeImage()" style="position: absolute; top: 10px; right: 20px; font-size: 35px; cursor: pointer; color: #333; z-index: 10;">&times;</span>
+            
+            <!-- Left: Photo -->
+            <div style="flex: 1; min-width: 300px; background: #f9f9f9; padding: 20px; text-align: center;">
+                <img id="fullImage" src="" style="max-width: 100%; max-height: 400px; object-fit: contain;">
+            </div>
+            
+            <!-- Right: Details -->
+            <div style="flex: 1; min-width: 300px; padding: 30px; display: flex; flex-direction: column; justify-content: center;">
+                <div id="m-cat" style="font-size: 11px; color: #999; text-transform: uppercase;"></div>
+                <h2 id="m-title" style="margin: 10px 0; color: #111;"></h2>
+                <div id="m-price" style="font-size: 26px; color: #b08d57; font-weight: 800; margin-bottom: 20px;"></div>
+		<p id="m-desc" style="font-size: 14px; color: #555; margin-bottom: 20px; line-height: 1.5; border-top: 1px solid #eee; padding-top: 10px;"></p>
+                <button id="modal-add-btn" class="add-btn" style="padding: 15px; cursor: pointer;">ADD TO BASKET</button>
+            </div>
+        </div>
     </div>
     <script>
         // Full Product Data
         const products = [
             // Wardrobes
-            { title: "1 Door Wardrobe ", price: 110, cat: "Wardrobe", sub: "1 Door", img: "https://i.ibb.co/YFTwR11P/IMG-20251231-181913-129.jpg" },
-            { title: "1 Door Wardrobe ", price: 110, cat: "Wardrobe", sub: "1 Door", img: "https://i.ibb.co/NgCRC7JJ/IMG-20251231-181854-718.jpg" },
-            { title: "1 Door Wardrobe ", price: 110, cat: "Wardrobe", sub: "1 Door", img: "https://i.ibb.co/35kGCcCs/IMG-20251231-181837-093.jpg" },
-            { title: "1 Door Wardrobe ", price: 110, cat: "Wardrobe", sub: "1 Door", img: "https://i.ibb.co/SDm9VfmQ/IMG-20251231-181905-158.jpg" },	
-            { title: "1 Door Wardrobe With 2 Draw & 1 Mirror ", price: 130, cat: "Wardrobe", sub: "1 Door", img: "https://i.ibb.co/GvfjyWtw/IMG-20251231-202148-389.png" },
-            { title: "2 Door Wardrobe with 2 Draw & 1 Mirror Full Set", price: 250, cat: "Wardrobe", sub: "2 Door", img: "https://i.ibb.co/nsW2vSXH/IMG-20251231-180137-358.png" },
-            { title: "2 Door Wardrobe Set Multiple Colour Available", price: 220, cat: "Wardrobe", sub: "2 Door", img: "https://i.ibb.co/L36NrYS/IMG-20251231-202640-944.png" },
-            { title: "3 Door Wardrobe with 3 Draw & 1 Mirror Full Set", price: 350, cat: "Wardrobe", sub: "3 Door", img: "https://i.ibb.co/KjdfMkBF/IMG-20251231-203357-790.jpg" },
-            { title: "3 Door Wardrobe with 3 Draw & 1 Mirror Full Set", price: 350, cat: "Wardrobe", sub: "3 Door", img: "https://i.ibb.co/1fD6b3x7/IMG-20251231-203352-880.jpg" },
-            { title: "3 Door Wardrobe with 3 Draw & 1 Mirror Full Set", price: 350, cat: "Wardrobe", sub: "3 Door", img: "https://i.ibb.co/rKhqHrLY/IMG-20260101-132002-646.jpg" },
-            { title: "4 Door Wardrobe with 4 Draw & 2 Mirror", price: 300, cat: "Wardrobe", sub: "4 Door", img: "https://i.ibb.co/KxFx7NXB/IMG-20260101-125834-562.jpg" },
-            { title: "5 Door Wardrobe with 2 Mirror", price: 350, cat: "Wardrobe", sub: "5 Door", img: "https://i.ibb.co/4ZTNr8S6/IMG-20260101-124741-859.jpg" },
-            { title: "5 Door Wardrobe with 4 Draw & 3 Mirror", price: 390, cat: "Wardrobe", sub: "5 Door", img: "https://i.ibb.co/4wJtS7QQ/IMG-20260101-125823-915.jpg" },
-            { title: "6 Door Wardrobe with 3 Draw & 4 Mirror", price: 430, cat: "Wardrobe", sub: "6 Door", img: "https://i.ibb.co/wZv91pKq/IMG-20260101-110902-247.jpg" },
-            { title: "8 Door Wardrobe with 6 Draw & 4 Mirror", price: 570, cat: "Wardrobe", sub: "8 Door", img: "https://i.ibb.co/Y7bW5yKK/IMG-20260101-110908-794.jpg" },
+            { title: "1 Door Wardrobe ", price: 110, oldPrice: 120, cat: "Wardrobe", sub: "1 Door", img: "https://i.ibb.co/YFTwR11P/IMG-20251231-181913-129.jpg", desc: "1 Door Wardrobe white m." },
+            { title: "1 Door Wardrobe ", price: 110, oldPrice: 120, cat: "Wardrobe", sub: "1 Door", img: "https://i.ibb.co/NgCRC7JJ/IMG-20251231-181854-718.jpg" },
+            { title: "1 Door Wardrobe ", price: 110, oldPrice: 120, cat: "Wardrobe", sub: "1 Door", img: "https://i.ibb.co/35kGCcCs/IMG-20251231-181837-093.jpg" },
+            { title: "1 Door Wardrobe ", price: 110, oldPrice: 120, cat: "Wardrobe", sub: "1 Door", img: "https://i.ibb.co/SDm9VfmQ/IMG-20251231-181905-158.jpg" },
+            { title: "2 Door Wardrobe Multiple Colour Available", price: 120, oldPrice: 130, cat: "Wardrobe", sub: "2 Door", img: "https://i.ibb.co/Q7JvzDTg/IMG-20260103-123136-508.jpg" },	
+            { title: "2 Door Wardrobe with 1 Mirror Multiple Colour Available", price: 130, oldPrice: 140, cat: "Wardrobe", sub: "2 Door", img: "https://i.ibb.co/5XWcRJ6T/IMG-20260103-123844-506.png" },	
+            { title: "1 Door Wardrobe With 2 Draw & 1 Mirror ", price: 130, oldPrice: 140, cat: "Wardrobe", sub: "1 Door", img: "https://i.ibb.co/GvfjyWtw/IMG-20251231-202148-389.png" },
+            { title: "2 Door Wardrobe with 2 Draw & 1 Mirror", price: 150, oldPrice: 160, cat: "Wardrobe", sub: "2 Door", img: "https://i.ibb.co/6cNYfscz/IMG-20260103-WA0094.jpg" },
+            { title: "2 Door Wardrobe with 2 Draw Multiple Colour Available", price: 140, oldPrice: 150, cat: "Wardrobe", sub: "2 Door", img: "https://i.ibb.co/yckrCXsF/IMG-20260103-124229-968.png" },
+            { title: "2 Door Wardrobe with 2 Draw & 2 Mirror", price: 160, oldPrice: 170, cat: "Wardrobe", sub: "2 Door", img: "https://i.ibb.co/dJsWtTw3/IMG-20260103-124514-264.jpg" },		
+            { title: "2 Door Wardrobe with 2 Draw & 1 Mirror Full Set", price: 250, oldPrice: 260, cat: "Wardrobe", sub: "2 Door", img: "https://i.ibb.co/nsW2vSXH/IMG-20251231-180137-358.png" },
+            { title: "2 Door Wardrobe Set Multiple Colour Available", price: 220, oldPrice: 230, cat: "Wardrobe", sub: "2 Door", img: "https://i.ibb.co/L36NrYS/IMG-20251231-202640-944.png" },
+            { title: "3 Door Wardrobe with 3 Draw & 1 Mirror Full Set", price: 350, oldPrice: 370, cat: "Wardrobe", sub: "3 Door", img: "https://i.ibb.co/KjdfMkBF/IMG-20251231-203357-790.jpg" },
+            { title: "3 Door Wardrobe with 3 Draw & 1 Mirror Full Set", price: 350, oldPrice: 370, cat: "Wardrobe", sub: "3 Door", img: "https://i.ibb.co/1fD6b3x7/IMG-20251231-203352-880.jpg" },
+            { title: "3 Door Wardrobe with 3 Draw & 1 Mirror Full Set", price: 350, oldPrice: 370, cat: "Wardrobe", sub: "3 Door", img: "https://i.ibb.co/rKhqHrLY/IMG-20260101-132002-646.jpg" },
+            { title: "4 Door Wardrobe with 4 Draw & 2 Mirror", price: 300, oldPrice: 310, cat: "Wardrobe", sub: "4 Door", img: "https://i.ibb.co/KxFx7NXB/IMG-20260101-125834-562.jpg" },
+            { title: "5 Door Wardrobe with 2 Mirror", price: 350, oldPrice: 370, cat: "Wardrobe", sub: "5 Door", img: "https://i.ibb.co/4ZTNr8S6/IMG-20260101-124741-859.jpg" },
+            { title: "5 Door Wardrobe with 4 Draw & 3 Mirror", price: 390, oldPrice: 410, cat: "Wardrobe", sub: "5 Door", img: "https://i.ibb.co/4wJtS7QQ/IMG-20260101-125823-915.jpg" },
+            { title: "6 Door Wardrobe with 3 Draw & 4 Mirror", price: 430, oldPrice: 450, cat: "Wardrobe", sub: "6 Door", img: "https://i.ibb.co/wZv91pKq/IMG-20260101-110902-247.jpg" },
+            { title: "8 Door Wardrobe with 6 Draw & 4 Mirror", price: 570, oldPrice: 599, cat: "Wardrobe", sub: "8 Door", img: "https://i.ibb.co/Y7bW5yKK/IMG-20260101-110908-794.jpg" },
             
             // Chest of Drawers
-            { title: "Bedside Table Black, Oak, Grey, White Colour Available", price: 40, cat: "Chest", sub: "With Handle Chester", img: "https://i.ibb.co/gLCsprT1/IMG-20260101-111035-642.jpg" },
-            { title: "5 Chest Of Drawer Black, Oak, Grey, White Colour Available", price: 100, cat: "Chest", sub: "With Handle Chester", img: "https://i.ibb.co/NnxVst47/IMG-20260101-130905-945.jpg" },
-            { title: "4 Chest Of Drawer & Bedside Table Black, Oak, Grey, White Colour Available", price: 130, cat: "Chest", sub: "With Handle Chester", img: "https://i.ibb.co/ccgtjq4G/IMG-20260101-111027-261.jpg" },
-            { title: "5 Chest Of Drawer & Bedside Table Black, Oak, Grey, White Colour Available", price: 140, cat: "Chest", sub: "With Handle Chester", img: "https://i.ibb.co/gMtmzy3c/IMG-20260101-130858-418.jpg" },
-            { title: "6 Chest Of Drawer Black, Oak, Grey, White Colour Available", price: 130, cat: "Chest", sub: "With Handle Chester", img: "https://i.ibb.co/Z6gYJr2P/IMG-20260101-111009-164.jpg" },
-            { title: "7 Chest Of Drawer Black, Oak, Grey, White Colour Available", price: 140, cat: "Chest", sub: "With Handle Chester", img: "https://i.ibb.co/0RbWmBTc/IMG-20260101-111019-368.jpg" },
-            { title: "3+3 Chester Black, Oak, Grey, White Colour Available", price: 140, cat: "Chest", sub: "With Handle Chester", img: "https://i.ibb.co/v6nhy2qN/IMG-20260101-130850-419.jpg" },
-            { title: "3+3 Chester Black, Oak, Grey, White Colour Available", price: 140, cat: "Chest", sub: "With Handle Chester", img: "https://i.ibb.co/Rk4gDLHT/IMG-20230309-WA0019.jpg" },
-            { title: "4+4 Chest Of Drawer Black, Oak, Grey, White Colour Available ", price: 160, cat: "Chest", sub: "With Handle Chester", img: "https://i.ibb.co/Rp7Vg2cJ/IMG-20260101-110953-830.jpg" },
-            { title: "4+4 Chest Of Drawer Black, Oak, Grey, White Colour Available", price: 160, cat: "Chest", sub: "With Handle Chester", img: "https://i.ibb.co/9k2zShZD/IMG-20260101-130842-869.jpg" },
-            { title: "5+5 Chest Of Drawer Black, Oak, Grey, White Colour Available", price: 180, cat: "Chest", sub: "With Handle Chester", img: "https://i.ibb.co/BHH4Vxp2/IMG-20260101-111001-876.jpg" },
-            { title: "5+5 Chest Of Drawer Black, Oak, Grey, White Colour Available", price: 180, cat: "Chest", sub: "With Handle Chester", img: "https://i.ibb.co/DfrRD63f/IMG-20260101-131057-518.jpg" },
-            { title: "6+6 Chest Of Drawer Black, Oak, Grey, White Colour Available", price: 230, cat: "Chest", sub: "With Handle Chester", img: "https://i.ibb.co/qLTr0sHm/IMG-20260101-130832-073.jpg" },
-            { title: "3+3 Chester Black, Oak, Grey, White Colour Available", price: 140, cat: "Chest", sub: "Without handle Chester", img: "https://i.ibb.co/Kcck7F6w/IMG-20260101-110917-846.jpg" },
-            { title: "3+3 Chester Multiple Colour Available", price: 140, cat: "Chest", sub: "Without handle Chester", img: "https://i.ibb.co/GQP3M1cJ/IMG-20251231-090903-578.png" },
-            { title: "6 Chest Of Drawer Black, Oak, Grey, White Colour Available", price: 130, cat: "Chest", sub: "Without handle Chester", img: "https://i.ibb.co/9k20RPRk/IMG-20260101-110928-499.jpg" },
-            { title: "7 Chest Of Drawer Black, Oak, Grey, White Colour Available", price: 140, cat: "Chest", sub: "Without handle Chester", img: "https://i.ibb.co/0Vdy45pT/IMG-20260101-110943-660.jpg" },
-            { title: "4+4 Chester Black, Oak, Grey, White Colour Available", price: 160, cat: "Chest", sub: "Without handle Chester", img: "https://i.ibb.co/7tmrxs1V/IMG-20260101-110936-302.jpg" },
+            { title: "Bedside Table Black, Oak, Grey, White Colour Available", price: 40, oldPrice: 50, cat: "Chest", sub: "With Handle Chester", img: "https://i.ibb.co/gLCsprT1/IMG-20260101-111035-642.jpg" },
+            { title: "5 Chest Of Drawer Black, Oak, Grey, White Colour Available", price: 100, oldPrice: 110, cat: "Chest", sub: "With Handle Chester", img: "https://i.ibb.co/NnxVst47/IMG-20260101-130905-945.jpg" },
+            { title: "4 Chest Of Drawer & Bedside Table Black, Oak, Grey, White Colour Available", price: 130, oldPrice: 140, cat: "Chest", sub: "With Handle Chester", img: "https://i.ibb.co/ccgtjq4G/IMG-20260101-111027-261.jpg" },
+            { title: "5 Chest Of Drawer & Bedside Table Black, Oak, Grey, White Colour Available", price: 140, oldPrice: 150, cat: "Chest", sub: "With Handle Chester", img: "https://i.ibb.co/gMtmzy3c/IMG-20260101-130858-418.jpg" },
+            { title: "6 Chest Of Drawer Black, Oak, Grey, White Colour Available", price: 130, oldPrice: 140, cat: "Chest", sub: "With Handle Chester", img: "https://i.ibb.co/Z6gYJr2P/IMG-20260101-111009-164.jpg" },
+            { title: "7 Chest Of Drawer Black, Oak, Grey, White Colour Available", price: 140, oldPrice: 150, cat: "Chest", sub: "With Handle Chester", img: "https://i.ibb.co/0RbWmBTc/IMG-20260101-111019-368.jpg" },
+            { title: "3+3 Chester Black, Oak, Grey, White Colour Available", price: 140, oldPrice: 150, cat: "Chest", sub: "With Handle Chester", img: "https://i.ibb.co/v6nhy2qN/IMG-20260101-130850-419.jpg" },
+            { title: "3+3 Chester Black, Oak, Grey, White Colour Available", price: 140, oldPrice: 150, cat: "Chest", sub: "With Handle Chester", img: "https://i.ibb.co/Rk4gDLHT/IMG-20230309-WA0019.jpg" },
+            { title: "4+4 Chest Of Drawer Black, Oak, Grey, White Colour Available ", price: 160, oldPrice: 170, cat: "Chest", sub: "With Handle Chester", img: "https://i.ibb.co/Rp7Vg2cJ/IMG-20260101-110953-830.jpg" },
+            { title: "4+4 Chest Of Drawer Black, Oak, Grey, White Colour Available", price: 160, oldPrice: 170, cat: "Chest", sub: "With Handle Chester", img: "https://i.ibb.co/9k2zShZD/IMG-20260101-130842-869.jpg" },
+            { title: "5+5 Chest Of Drawer Black, Oak, Grey, White Colour Available", price: 180, oldPrice: 190, cat: "Chest", sub: "With Handle Chester", img: "https://i.ibb.co/BHH4Vxp2/IMG-20260101-111001-876.jpg" },
+            { title: "5+5 Chest Of Drawer Black, Oak, Grey, White Colour Available", price: 180, oldPrice: 190, cat: "Chest", sub: "With Handle Chester", img: "https://i.ibb.co/DfrRD63f/IMG-20260101-131057-518.jpg" },
+            { title: "6+6 Chest Of Drawer Black, Oak, Grey, White Colour Available", price: 230, oldPrice: 250, cat: "Chest", sub: "With Handle Chester", img: "https://i.ibb.co/qLTr0sHm/IMG-20260101-130832-073.jpg" },
+            { title: "3+3 Chester Black, Oak, Grey, White Colour Available", price: 140, oldPrice: 150, cat: "Chest", sub: "Without handle Chester", img: "https://i.ibb.co/Kcck7F6w/IMG-20260101-110917-846.jpg" },
+            { title: "3+3 Chester Multiple Colour Available", price: 140, oldPrice: 150, cat: "Chest", sub: "Without handle Chester", img: "https://i.ibb.co/GQP3M1cJ/IMG-20251231-090903-578.png" },
+            { title: "6 Chest Of Drawer Black, Oak, Grey, White Colour Available", price: 130, oldPrice: 140, cat: "Chest", sub: "Without handle Chester", img: "https://i.ibb.co/9k20RPRk/IMG-20260101-110928-499.jpg" },
+            { title: "7 Chest Of Drawer Black, Oak, Grey, White Colour Available", price: 140, oldPrice: 150, cat: "Chest", sub: "Without handle Chester", img: "https://i.ibb.co/0Vdy45pT/IMG-20260101-110943-660.jpg" },
+            { title: "4+4 Chester Black, Oak, Grey, White Colour Available", price: 160, oldPrice: 170, cat: "Chest", sub: "Without handle Chester", img: "https://i.ibb.co/7tmrxs1V/IMG-20260101-110936-302.jpg" },
 
             // Beds
             { title: "Grey Velvet Ottoman Storage Bed", price: 399, cat: "Bed", sub: "Ottoman Bed", img: "https://images.unsplash.com/photo-1505693419148-de39736e4481?w=500" },
@@ -195,7 +297,10 @@
             { title: "3+2 Seater Luxury Sofa Set", price: 650, cat: "Sofa", sub: "Sofa set", img: "https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?w=500" },
 
             // Dining
-            { title: "Marble Top Dining Table + 6 Chairs", price: 750, cat: "Dining", sub: "Marble Top", img: "https://images.unsplash.com/photo-1617806118233-18e1db208fa0?w=500" }
+            { title: "GREY WAVE GLASS ROUND TABLE WITH 4 CHAIR-GREY", price: 230, oldPrice: 250, cat: "Dining", sub: "4 Chair", img: "https://i.ibb.co/ccr2kqG8/IMG-20260103-130837-871.jpg" },
+            { title: "FULL WHITE TABLE WITH 6 WHITE AND BLACK CHAIRS", price: 280, oldPrice: 299, cat: "Dining", sub: "6 Chair", img: "https://i.ibb.co/wNV1CWqf/IMG-20260103-130205-854.jpg" }
+
+
         ];
 
         // Sub-category Mapping
@@ -204,7 +309,7 @@
             'Chest': ['All', 'With Handle Chester', 'Without handle Chester'],
             'Bed': ['All', 'Divan Bed', 'Ottoman Bed', 'Sleigh Bed', 'Panel Bed'],
             'Sofa': ['All', 'U Shape sofa', 'L Shape sofa', 'Divan sofa', 'Sofa set'],
-            'Dining': ['All', 'Marble Top', 'Wooden', '4 Seater', '6 Seater']
+            'Dining': ['All', 'Marble Top', 'Wooden', '4 Chair', '6 Chair']
         };
 
         let basket = [];
@@ -220,6 +325,105 @@
             container.innerHTML = subCats[cat].map(s => `
                 <button class="sub-btn ${currentFilter.sub === s ? 'active' : ''}" onclick="setSub('${s}', this)">${s}</button>
             `).join('');
+        }
+
+
+
+function setCategory(cat, btn) {
+            // Jab category click ho to search bar ko khali kar dena
+            if(document.getElementById('searchInput')) {
+                document.getElementById('searchInput').value = '';
+            }
+            
+            currentFilter.cat = cat;
+            currentFilter.sub = 'All';
+            document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            renderSubNav(cat);
+            renderProducts();
+        }
+
+        function setSub(sub, btn) {
+            currentFilter.sub = sub;
+            document.querySelectorAll('.sub-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            renderProducts();
+        }
+function renderProducts() {
+            const grid = document.getElementById('product-grid');
+            
+            // 1. Category aur Sub-category ke mutabiq filter karna
+            const data = products.filter(p => 
+                (currentFilter.cat === 'All' || p.cat === currentFilter.cat) && 
+                (currentFilter.sub === 'All' || p.sub === currentFilter.sub)
+            );
+            
+            // 2. Grid mein products dikhana
+            grid.innerHTML = data.map((p) => {
+                let idx = products.indexOf(p); // Item ka number pakarna
+                
+                // SALE Tag ka logic: Agar data mein oldPrice likhi hai to tag dikhao
+                let saleTag = p.oldPrice ? `<div class="sale-badge">SALE</div>` : '';
+                
+                // Old Price ka logic: Agar purani price hai to kati hui price dikhao
+                let oldPriceHtml = p.oldPrice ? `<span class="old-price" style="text-decoration: line-through; color: #999; margin-right: 7px; font-weight: normal; font-size: 0.9em;">£${p.oldPrice}</span>` : '';
+
+                return `
+                <div class="product-card" style="position: relative;">
+                    ${saleTag}
+                    <img src="${p.img}" onclick="openImage(${idx})" alt="${p.title}">
+                    <div class="product-info">
+                        <div>
+                            <div class="p-title">${p.title}</div>
+                            <div style="font-size:10px; color:#999; text-transform:uppercase;">${p.sub}</div>
+                        </div>
+                        <div>
+                            <div class="p-price" style="font-weight: 800; color: #b08d57;">
+                                ${oldPriceHtml} £${p.price}
+                            </div>
+                            <button class="add-btn" onclick="addToBasket(${idx})">ADD TO BASKET</button>
+                        </div>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+        // Search Bar ke liye alag function
+        function searchProducts() {
+            let input = document.getElementById('searchInput').value.toLowerCase();
+            const grid = document.getElementById('product-grid');
+            
+            // Search filter: Title ya Category mein dhoondna
+            const filtered = products.filter(p => 
+                p.title.toLowerCase().includes(input) || 
+                p.cat.toLowerCase().includes(input)
+            );
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 50px; color: #999;">No products found!</div>`;
+                return;
+            }
+
+            grid.innerHTML = filtered.map((p) => {
+                let idx = products.indexOf(p);
+                let saleTag = p.oldPrice ? `<div class="sale-badge">SALE</div>` : '';
+                let oldPriceHtml = p.oldPrice ? `<span style="text-decoration: line-through; color: #999; margin-right: 7px; font-size: 0.9em; font-weight: normal;">£${p.oldPrice}</span>` : '';
+
+                return `
+                <div class="product-card" style="position: relative;">
+                    ${saleTag}
+                    <img src="${p.img}" onclick="openImage(${idx})" alt="${p.title}">
+                    <div class="product-info">
+                        <div>
+                            <div class="p-title">${p.title}</div>
+                            <div style="font-size:10px; color:#999; text-transform:uppercase;">${p.sub}</div>
+                        </div>
+                        <div>
+                            <div class="p-price">${oldPriceHtml} £${p.price}</div>
+                            <button class="add-btn" onclick="addToBasket(${idx})">ADD TO BASKET</button>
+                        </div>
+                    </div>
+                </div>`;
+            }).join('');
         }
 
         function setCategory(cat, btn) {
@@ -247,7 +451,7 @@
             
             grid.innerHTML = data.map((p) => `
                 <div class="product-card">
-                    <img src="${p.img}" onclick="openImage('${p.img}')" alt="${p.title}">
+		    <img src="${p.img}" onclick="openImage(${products.indexOf(p)})" alt="${p.title}">
                     <div class="product-info">
                         <div>
                             <div class="p-title">${p.title}</div>
@@ -310,15 +514,45 @@
         };
 
         renderProducts();
-function openImage(src) {
-    document.getElementById('imageModal').style.display = "flex";
-    document.getElementById('fullImage').src = src;
-}
+function openImage(index) {
+            const p = products[index];
+            document.getElementById('imageModal').style.display = "flex";
+            document.getElementById('fullImage').src = p.img;
+            document.getElementById('m-title').innerText = p.title;
+            document.getElementById('m-price').innerText = "£" + p.price;
+            document.getElementById('m-cat').innerText = p.cat + " > " + p.sub;
+            
+            // Description check: Agar m-desc box hai to detail dikhao
+            if(document.getElementById('m-desc')) {
+                document.getElementById('m-desc').innerText = p.desc ? p.desc : "";
+            }
 
-function closeImage() {
-    document.getElementById('imageModal').style.display = "none";
-}
+            document.getElementById('modal-add-btn').onclick = function() {
+                addToBasket(index);
+                closeImage();
+            };
+        } // <--- Yeh bracket missing tha, ab theek hai
+
+        function closeImage() {
+            document.getElementById('imageModal').style.display = "none";
+        }
     </script>
+
+    <!-- Floating Buttons: Facebook, Messenger, WhatsApp -->
+    <div class="floating-contact-wrap">
+        <!-- Facebook -->
+        <a href="https://www.facebook.com/profile.php?id=61562163172208" class="btn-facebook" target="_blank">
+            <img src="https://cdn-icons-png.flaticon.com/512/124/124010.png" alt="FB">
+        </a>
+        <!-- Messenger -->
+        <a href="https://m.me/ukfurniturehouse01" class="btn-messenger" target="_blank">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/b/be/Facebook_Messenger_logo_2020.svg" alt="Messenger">
+        </a>
+        <!-- WhatsApp -->
+        <a href="https://wa.me/447473019909" class="btn-whatsapp" target="_blank">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp">
+        </a>
+    </div>
 </div>
 </body>
 </html>
